@@ -27,7 +27,6 @@ class Spaceship (pygame.sprite.Sprite):
         if keys [pygame.K_SPACE] and self.laser_ready == True:
             self.laser_ready = False
             laser = Lasers(self.rect.center, 5, self.screen_y)
-            time.sleep
             self.laser_groups.add(laser)
             self.laser_time = pygame.time.get_ticks()
 
