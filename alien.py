@@ -13,13 +13,22 @@ class Alien(pygame.sprite.Sprite):
 class Mystery_Ship(pygame.sprite.Sprite):
     def __init__(self, screen_x):
         super().__init__()
-        self.image = pygame.image.load("sprite/spaceship")
+        self.image = pygame.image.load("sprites/mystery.png")
         self.screen_x = screen_x
 
         x = random.choice([0,self.screen_x - self.image.get_width()])   
 
+        if x == 0:
+            self.speed = 3
+        else:
+            self.speed = -3
+
         self.rect = self.image.get_rect(topleft=(x,40))
-        self.speed = 5
+        
 
     def update(self):
-        self.rect += self.speed
+        self.rect.x += self.speed
+        if self.rect.right > self.screen_x:
+            self.kill()
+        elif self.rect.left < 0:
+            self.kill()

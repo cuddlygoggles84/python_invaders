@@ -1,5 +1,5 @@
 import pygame, random
-from spaceship import Spaceship
+from spaceship import Spaceship, Lasers
 from obstacle import Obstacle
 from obstacle import grid
 from alien import Alien, Mystery_Ship
@@ -15,7 +15,7 @@ class Game:
         self.aliens_group = pygame.sprite.Group()
         self.spawn_aliens()
         self.alien_direction = 1
-        self.alien_lasers_groups = pygame.sprite.Group()
+        self.alien_lasers_group = pygame.sprite.Group()
         self.mystery_ship_group = pygame.sprite.GroupSingle()
 
     def spawn_obstacle(self):
@@ -63,7 +63,47 @@ class Game:
         if self.aliens_group.sprites():
             random_alien = random.choice(self.aliens_group.sprites())
             laser_sprite = Lasers(random_alien.rect.center, -6, self.screen_y)
-            self.alien_lasers_groups.add(laser_sprite)
+            self.alien_lasers_group.add(laser_sprite)
+
+    def spawn_mystery_ship(self):
+        self.mystery_ship_group.add(Mystery_Ship(self.screen_x))
+
+    def check_for_collisions(self):
+        #Check for Spaceship Laser collsions
+        if self.spaceship_group.sprite.lasers_group:
+            for laser_sprite in self.spaceship_group.sprite.lasers_group:
+                if pygame.sprite.spritecollide(laser_sprite, self.aliens_group, True):
+                    laser_sprite.kill()
+                if pygame.sprite.spritecollide(laser_sprite, self.mystery_ship_group, True):
+                    laser_sprite.kill()
+                for obstacle in self.obstacles:
+                    if pygame.sprite.spritecollide(laser_sprite, obstacle.blocks_group, True):
+                        laser_sprite.kill()
+        
+        #Check for Alien Laser collisions
+
+        if self.alien_lasers_group:
+            for laser_sprite in self.alien_lasers_group:
+                if pygame.sprite.spritecollide(laser_sprite, self.spaceship_group, False):
+                    laser_sprite.kill()
+
+                for obstacle in self.obstacles:
+                    if pygame.sprite.spritecollide(laser_sprite, obstacle.blocks_group, True):
+                        laser_sprite.kill()
+
+            if self.aliens_group:
+                for alien in self.aliens_group:
+                    for obstacle in self.obstacles:
+                        pygame.sprite.spritecollide(alien, obstacle.blocks_group, True)
+
+            
+
+
+        
+
+
+
+
 
 
 
