@@ -97,16 +97,3 @@ class Game:
                         pygame.sprite.spritecollide(alien, obstacle.blocks_group, True)
 
             
-
-
-        
-
-
-
-
-
-
-
-
-            
-
